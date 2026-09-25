@@ -1,0 +1,243 @@
+{
+  "users": [
+    {
+      "id": "usr_student_alex",
+      "name": "Alex Rivera",
+      "email": "alex.student@campus.edu",
+      "phone": "+1 (555) 234-5678",
+      "userType": "USER",
+      "college": "Stanford Central Campus",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "createdAt": "2026-09-15T16:21:59.981Z"
+    },
+    {
+      "id": "usr_student_sarah",
+      "name": "Sarah Chen",
+      "email": "sarah.c@campus.edu",
+      "phone": "+1 (555) 345-6789",
+      "userType": "USER",
+      "college": "Stanford Central Campus",
+      "avatarUrl": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
+      "createdAt": "2026-09-17T16:21:59.981Z"
+    },
+    {
+      "id": "usr_canteen_chef_marco",
+      "name": "Chef Marco Rossi",
+      "email": "chef.marco@campus.edu",
+      "phone": "+1 (555) 789-0123",
+      "userType": "COLLEGE",
+      "college": "Stanford Central Campus",
+      "canteenName": "Tresidder Student Dining Hall",
+      "isVerified": true,
+      "avatarUrl": "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=200&q=80",
+      "createdAt": "2026-08-26T16:21:59.981Z"
+    },
+    {
+      "id": "usr_canteen_priya",
+      "name": "Priya Sharma (Catering Dir.)",
+      "email": "priya.catering@campus.edu",
+      "phone": "+1 (555) 890-1234",
+      "userType": "COLLEGE",
+      "college": "UC Berkeley Campus",
+      "canteenName": "Crossroads Dining Commons",
+      "isVerified": true,
+      "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
+      "createdAt": "2026-09-05T16:21:59.981Z"
+    },
+    {
+      "id": "usr_admin",
+      "name": "Foodlink Campus Admin",
+      "email": "admin@foodlink.edu",
+      "phone": "+1 (555) 999-0000",
+      "userType": "ADMIN",
+      "college": "System-wide Admin",
+      "avatarUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80",
+      "createdAt": "2026-07-27T16:21:59.981Z"
+    }
+  ],
+  "foodPosts": [
+    {
+      "id": "post_lemon_rice",
+      "collegeId": "col_stanford",
+      "canteenId": "cant_tresidder",
+      "collegeName": "Stanford Central Campus",
+      "canteenName": "Tresidder Student Dining Hall",
+      "foodName": "Fragrant Lemon Herb Rice & Dal",
+      "description": "Freshly prepared South Asian style lemon rice with mustard seeds, roasted cashews, and rich yellow lentil tadka. Packaged in sanitized hot-food takeout containers from lunch service.",
+      "quantity": "20 portions",
+      "servingsCount": 20,
+      "imageUrl": "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=800&q=80",
+      "availableFrom": "2026-09-25T16:06:59.981Z",
+      "collectionDeadline": "2026-09-25T18:21:59.981Z",
+      "location": "Tresidder Memorial Union, 2nd Floor Dining Counter #3 (Ask for Chef Marco)",
+      "status": "AVAILABLE",
+      "foodSafetyInfo": "Prepared at 11:30 AM today in our certified commercial kitchen. Kept in warm holding at 65°C. Safe to consume within 3 hours or refrigerate immediately.",
+      "dietaryTags": [
+        "Vegetarian",
+        "Vegan",
+        "Gluten-Free",
+        "Halal-Friendly"
+      ],
+      "temperature": "HOT",
+      "createdAt": "2026-09-25T16:01:59.981Z"
+    },
+    {
+      "id": "post_artisan_sandwiches",
+      "collegeId": "col_stanford",
+      "canteenId": "cant_tresidder",
+      "collegeName": "Stanford Central Campus",
+      "canteenName": "Tresidder Student Dining Hall",
+      "foodName": "Gourmet Baguette Sandwiches & Salad Box",
+      "description": "Assortment of freshly assembled sandwiches from today's academic conference catering: Roasted Mediterranean Veggie & Pesto, Smoked Turkey Breast with Swiss, and Caprese Ciabatta.",
+      "quantity": "15 meal boxes",
+      "servingsCount": 15,
+      "imageUrl": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
+      "availableFrom": "2026-09-25T15:51:59.981Z",
+      "collectionDeadline": "2026-09-25T19:51:59.981Z",
+      "location": "Faculty Club Catering Dispatch, Ground Floor Service Bay",
+      "status": "AVAILABLE",
+      "foodSafetyInfo": "Sealed individually in compostable boxes with ice-pack chilled transport. Consume by tonight.",
+      "dietaryTags": [
+        "Vegetarian Option",
+        "Halal-Friendly"
+      ],
+      "temperature": "COLD",
+      "createdAt": "2026-09-25T15:46:59.981Z"
+    },
+    {
+      "id": "post_pasta_primavera",
+      "collegeId": "col_berkeley",
+      "canteenId": "cant_crossroads",
+      "collegeName": "UC Berkeley Campus",
+      "canteenName": "Crossroads Dining Commons",
+      "foodName": "Penne Pasta Primavera with Garlic Focaccia",
+      "description": "Penne tossed with sautéed zucchini, cherry tomatoes, baby spinach, basil pesto, and parmesan. Served with warm garlic herb bread.",
+      "quantity": "25 servings",
+      "servingsCount": 25,
+      "imageUrl": "https://images.unsplash.com/photo-1621996346565-e3d5d6281691?auto=format&fit=crop&w=800&q=80",
+      "availableFrom": "2026-09-25T16:11:59.981Z",
+      "collectionDeadline": "2026-09-25T21:21:59.981Z",
+      "location": "Crossroads Main Hall, North Pickup Station by the green recycle banner",
+      "status": "AVAILABLE",
+      "foodSafetyInfo": "Fresh from lunchtime hotline at 12:00 PM. Kept under commercial heating.",
+      "dietaryTags": [
+        "Vegetarian",
+        "Nut-Free"
+      ],
+      "temperature": "HOT",
+      "createdAt": "2026-09-25T16:06:59.981Z"
+    },
+    {
+      "id": "post_roast_chicken",
+      "collegeId": "col_stanford",
+      "canteenId": "cant_tresidder",
+      "collegeName": "Stanford Central Campus",
+      "canteenName": "Tresidder Student Dining Hall",
+      "foodName": "Rosemary Garlic Roasted Chicken & Wedges",
+      "description": "Tender chicken quarters slow-roasted with fresh rosemary, whole garlic cloves, served with golden potato wedges and steamed green beans.",
+      "quantity": "18 portions",
+      "servingsCount": 18,
+      "imageUrl": "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=800&q=80",
+      "availableFrom": "2026-09-25T15:41:59.981Z",
+      "collectionDeadline": "2026-09-25T22:21:59.981Z",
+      "location": "Tresidder Kitchen Back Entrance, Loading Gate 2",
+      "status": "CLAIMED",
+      "claimedBy": "usr_student_alex",
+      "claimantName": "Alex Rivera",
+      "claimantPhone": "+1 (555) 234-5678",
+      "claimCode": "FL-8241",
+      "claimedAt": "2026-09-25T16:11:59.981Z",
+      "foodSafetyInfo": "Fully cooked to internal temp 78°C. Securely packed in insulated thermal bags ready for student pickup.",
+      "dietaryTags": [
+        "High-Protein",
+        "Gluten-Free",
+        "Halal-Friendly"
+      ],
+      "temperature": "HOT",
+      "createdAt": "2026-09-25T15:36:59.981Z"
+    },
+    {
+      "id": "post_fruit_pastries",
+      "collegeId": "col_berkeley",
+      "canteenId": "cant_crossroads",
+      "collegeName": "UC Berkeley Campus",
+      "canteenName": "Crossroads Dining Commons",
+      "foodName": "Morning Bakery Pastries & Fresh Fruit Bowls",
+      "description": "Assorted croissants, blueberry muffins, cinnamon scrolls, and individual melon-berry fruit cups left over from breakfast seminar.",
+      "quantity": "30 items",
+      "servingsCount": 30,
+      "imageUrl": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80",
+      "availableFrom": "2026-09-25T13:21:59.981Z",
+      "collectionDeadline": "2026-09-25T15:21:59.981Z",
+      "location": "Crossroads Cafe Counter",
+      "status": "COLLECTED",
+      "claimedBy": "usr_student_sarah",
+      "claimantName": "Sarah Chen",
+      "claimantPhone": "+1 (555) 345-6789",
+      "claimCode": "FL-3190",
+      "claimedAt": "2026-09-25T13:21:59.981Z",
+      "collectedAt": "2026-09-25T14:51:59.981Z",
+      "foodSafetyInfo": "Baked this morning at 6:00 AM. Stored at clean ambient temperature.",
+      "dietaryTags": [
+        "Vegetarian"
+      ],
+      "temperature": "ROOM_TEMP",
+      "createdAt": "2026-09-25T12:21:59.981Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim_alex_chicken",
+      "foodPostId": "post_roast_chicken",
+      "userId": "usr_student_alex",
+      "userName": "Alex Rivera",
+      "userPhone": "+1 (555) 234-5678",
+      "status": "CLAIMED",
+      "claimCode": "FL-8241",
+      "claimedAt": "2026-09-25T16:11:59.981Z"
+    },
+    {
+      "id": "claim_sarah_bakery",
+      "foodPostId": "post_fruit_pastries",
+      "userId": "usr_student_sarah",
+      "userName": "Sarah Chen",
+      "userPhone": "+1 (555) 345-6789",
+      "status": "COLLECTED",
+      "claimCode": "FL-3190",
+      "claimedAt": "2026-09-25T13:21:59.981Z",
+      "collectedAt": "2026-09-25T14:51:59.981Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif_1",
+      "userId": "usr_student_alex",
+      "foodPostId": "post_roast_chicken",
+      "title": "Claim Confirmed! 🎉",
+      "message": "You successfully reserved Rosemary Garlic Roasted Chicken. Please collect before the deadline using code FL-8241.",
+      "type": "CLAIM_SUCCESS",
+      "read": false,
+      "createdAt": "2026-09-25T16:11:59.981Z"
+    },
+    {
+      "id": "notif_2",
+      "userId": "usr_canteen_chef_marco",
+      "foodPostId": "post_roast_chicken",
+      "title": "New Food Claim! 📋",
+      "message": "Alex Rivera has claimed your surplus Roasted Chicken post (18 portions). Collection code: FL-8241.",
+      "type": "FOOD_CLAIMED",
+      "read": false,
+      "createdAt": "2026-09-25T16:11:59.981Z"
+    },
+    {
+      "id": "notif_3",
+      "userId": "usr_student_alex",
+      "foodPostId": "post_lemon_rice",
+      "title": "New Surplus Food Near You 🍲",
+      "message": "Tresidder Student Dining Hall just posted 20 portions of Fragrant Lemon Herb Rice & Dal.",
+      "type": "NEW_FOOD",
+      "read": true,
+      "createdAt": "2026-09-25T16:01:59.981Z"
+    }
+  ]
+}
