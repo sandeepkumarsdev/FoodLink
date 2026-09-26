@@ -78,17 +78,12 @@ export default function App() {
       setFoodPosts(postsData);
       setStats(statsData);
 
-      // Default to student Alex if no user is selected yet
-      if (!currentUser && usersData.length > 0) {
-        const studentUser = usersData.find((u) => u.userType === 'USER') || usersData[0];
-        setCurrentUser(studentUser);
-      }
     } catch (err) {
       console.error('Failed to load initial data:', err);
     } finally {
       setIsLoading(false);
     }
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     fetchData();

@@ -140,7 +140,6 @@ app.get('/api/events', (req: Request, res: Response) => {
   });
 });
 
-// 2. Authentication Mock/Session backed by PostgreSQL
 app.post('/api/auth/login', async (req: Request, res: Response) => {
   const { email, role } = req.body;
   if (!email) {
@@ -153,25 +152,10 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
 
     if (existing.rows.length > 0) {
       user = mapRowToUser(existing.rows[0]);
+      res.json({ user, token: 'mock-jwt-token-' + user.id });
     } else {
-      const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
-      const newId = 'usr_' + crypto.randomUUID().slice(0, 8);
-      const userType = role || 'USER';
-      const college = 'Stanford Central Campus';
-      const canteenName = role === 'COLLEGE' ? 'Campus Central Dining' : null;
-      const isVerified = role === 'COLLEGE' ? true : false;
-      const avatarUrl = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80';
-
-      const insertRes = await query(
-        `INSERT INTO users (id, name, email, phone, user_type, college, canteen_name, is_verified, avatar_url, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
-         RETURNING *`,
-        [newId, name, email, '+1 (555) 000-1122', userType, college, canteenName, isVerified, avatarUrl]
-      );
-      user = mapRowToUser(insertRes.rows[0]);
+      return res.status(404).json({ error: 'User not found. Please sign up first.' });
     }
-
-    res.json({ user, token: 'mock-jwt-token-' + user.id });
   } catch (err: any) {
     console.error('Login error:', err);
     res.status(500).json({ error: 'Database error during login' });
@@ -955,16 +939,7 @@ app.post('/api/users/:id/verify-canteen', async (req: Request, res: Response) =>
 
 // Reset demo data in PostgreSQL
 app.post('/api/reset-demo', async (req: Request, res: Response) => {
-  try {
-    await seedPostgresData();
-    sseBroadcast({
-      type: 'FOOD_CREATED',
-      timestamp: new Date().toISOString(),
-    });
-    res.json({ success: true, message: 'PostgreSQL database reset to clean demo state.' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to reset PostgreSQL demo database' });
-  }
+  res.status(403).json({ error: 'Reset demo is disabled for live databases.' });
 });
 
 // ================= SERVER STARTUP =================

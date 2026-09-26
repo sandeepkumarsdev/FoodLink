@@ -95,15 +95,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>Specs & Architecture</span>
             </button>
 
-            <button
-              onClick={handleReset}
-              disabled={isResetting}
-              className="inline-flex items-center gap-1 text-[11px] text-emerald-300 hover:text-white transition-colors"
-              title="Restore original seed meals and claims"
-            >
-              <RefreshCw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
-              <span>Reset Demo</span>
-            </button>
           </div>
         </div>
       </div>
@@ -272,40 +263,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         </span>
                       </div>
 
-                      <div className="px-3 py-1.5">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                          Switch Demo Persona
-                        </p>
-                        <div className="space-y-1 mt-1">
-                          {availableUsers.map((u) => (
-                            <button
-                              key={u.id}
-                              onClick={() => {
-                                onSwitchUser(u);
-                                setShowUserMenu(false);
-                              }}
-                              className={`w-full text-left px-2.5 py-1.5 rounded-md text-xs flex items-center justify-between transition-colors ${
-                                u.id === currentUser.id
-                                  ? 'bg-emerald-50 text-emerald-900 font-bold'
-                                  : 'hover:bg-slate-50 text-slate-700'
-                              }`}
-                            >
-                              <div className="flex items-center gap-2">
-                                <img src={u.avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover" />
-                                <div>
-                                  <div className="font-semibold text-slate-800">{u.name}</div>
-                                  <div className="text-[10px] text-slate-500">
-                                    {u.userType === 'COLLEGE' ? '👨‍🍳 Canteen' : u.userType === 'ADMIN' ? '🛡️ Admin' : '🎓 Student'}
-                                  </div>
-                                </div>
-                              </div>
-                              {u.id === currentUser.id && (
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+
 
                       <div className="border-t border-slate-100 mt-1 pt-1 px-2">
                         <button

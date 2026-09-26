@@ -10,14 +10,16 @@
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
     "@google/genai": "^2.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
-    "cors": "^2.8.5"
+    "pg": "^8.23.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@types/express": "^4.17.21",
     "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "@types/pg": "^8.23.1",
     "tsx": "^4.21.0",
     "typescript": "^7.0.2"
   }

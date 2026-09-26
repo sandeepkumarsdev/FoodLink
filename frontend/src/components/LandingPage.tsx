@@ -116,35 +116,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
 
-            {/* Instant Demo Personas Quick Picker */}
-            <div className="pt-4 border-t border-slate-200/80">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2.5">
-                ⚡ Or Jump Straight In (1-Click Demo Accounts):
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {availableUsers.slice(0, 3).map((u) => (
-                  <button
-                    key={u.id}
-                    onClick={() => onSelectUser(u)}
-                    className="p-3 rounded-xl bg-white hover:bg-emerald-50/80 border border-slate-200 hover:border-emerald-300 text-left transition-all shadow-2xs group flex items-center gap-2.5 cursor-pointer"
-                  >
-                    <img
-                      src={u.avatarUrl}
-                      alt=""
-                      className="w-8 h-8 rounded-full object-cover ring-2 ring-emerald-500/20"
-                    />
-                    <div className="min-w-0">
-                      <div className="text-xs font-bold text-slate-900 group-hover:text-emerald-700 truncate">
-                        {u.name.split(' ')[0]} ({u.userType === 'COLLEGE' ? 'Canteen' : 'Student'})
-                      </div>
-                      <div className="text-[10px] text-slate-500 truncate">
-                        {u.email}
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+
           </div>
 
           {/* Right Column: Interactive Login / Register Form */}

@@ -1,24 +1,75 @@
 import { PGlite } from '@electric-sql/pglite';
+import pgDriver from 'pg';
 import path from 'path';
 import fs from 'fs';
+import * as dotenv from 'dotenv';
 import { User, FoodPost, Claim, NotificationItem } from '../src/types/index.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
-const PG_DATA_DIR = path.join(DATA_DIR, 'pgdata');
+dotenv.config();
 
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+export interface DbClient {
+  query<T = any>(sql: string, params?: any[]): Promise<{ rows: T[] }>;
+  exec(sql: string): Promise<void>;
 }
 
-// Persistent Local PostgreSQL Instance via PGlite
-export const pg = new PGlite(PG_DATA_DIR);
+let dbClient: DbClient;
+export let isVercelPostgres = false;
+
+if (process.env.POSTGRES_URL) {
+  isVercelPostgres = true;
+  // Use a Pool with max: 1 to ensure transaction state (BEGIN/COMMIT) works as expected 
+  // since server.ts uses pg.exec('BEGIN') and query() sequentially, while allowing auto-reconnects.
+  const pool = new pgDriver.Pool({
+    connectionString: process.env.POSTGRES_URL,
+    ssl: { rejectUnauthorized: false },
+    max: 1
+  });
+  
+  pool.on('error', (err) => {
+    console.error('Unexpected error on idle Postgres client', err);
+  });
+  
+  dbClient = {
+    query: async (sql, params) => {
+      const res = await pool.query(sql, params);
+      return { rows: res.rows };
+    },
+    exec: async (sql) => {
+      await pool.query(sql);
+    }
+  };
+} else {
+  const DATA_DIR = path.resolve(process.cwd(), 'data');
+  const PG_DATA_DIR = path.join(DATA_DIR, 'pgdata');
+
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+
+  const pgliteInstance = new PGlite(PG_DATA_DIR);
+  dbClient = {
+    query: async (sql, params) => {
+      return (params !== undefined ? pgliteInstance.query(sql, params) : pgliteInstance.query(sql)) as any;
+    },
+    exec: async (sql) => {
+      await pgliteInstance.exec(sql);
+    }
+  };
+}
+
+// Persistent Local or Remote PostgreSQL Instance
+export const pg = dbClient;
 
 export async function query<T = any>(sql: string, params?: any[]): Promise<{ rows: T[] }> {
-  return (params !== undefined ? pg.query<T>(sql, params) : pg.query<T>(sql)) as Promise<{ rows: T[] }>;
+  return dbClient.query<T>(sql, params);
 }
 
 export async function initPostgres() {
-  console.log('Initializing local PostgreSQL database at:', PG_DATA_DIR);
+  if (isVercelPostgres) {
+    console.log('Initializing Vercel PostgreSQL database...');
+  } else {
+    console.log('Initializing local PostgreSQL database at: data/pgdata');
+  }
 
   // 1. Create Tables
   await pg.exec(`
