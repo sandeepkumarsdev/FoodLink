@@ -9,6 +9,7 @@
     "dev": "npm run dev --workspaces --if-present",
     "dev:frontend": "npm run dev --workspace=foodlink-frontend",
     "dev:backend": "npm run dev --workspace=foodlink-backend",
+    "build": "npm run build --workspace=foodlink-frontend",
     "install:all": "npm install"
   }
 }
