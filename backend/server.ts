@@ -946,11 +946,15 @@ app.post('/api/reset-demo', async (req: Request, res: Response) => {
 async function startServer() {
   await initPostgres();
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Foodlink server with local PostgreSQL database listening on port ${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Foodlink server with local PostgreSQL database listening on port ${PORT}`);
+    });
+  }
 }
 
 startServer().catch((err) => {
   console.error('Failed to start Foodlink server:', err);
 });
+
+export default app;
