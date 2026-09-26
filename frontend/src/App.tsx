@@ -104,76 +104,37 @@ export default function App() {
     fetchNotifications();
   }, [fetchNotifications]);
 
-  // 3. Server-Sent Events (SSE) Real-Time Synchronization Hub
+  // 3. Fallback Polling Real-Time Synchronization Hub (Replaces SSE for Serverless compatibility)
   useEffect(() => {
-    const eventSource = new EventSource('/api/events');
+    let interval: ReturnType<typeof setInterval>;
 
-    eventSource.onopen = () => {
-      setIsSseConnected(true);
-    };
-
-    eventSource.onmessage = (event) => {
+    const pollData = async () => {
       try {
-        const data: RealtimeEvent = JSON.parse(event.data);
-        if (!data || !data.type) return;
+        const [posts, statsData] = await Promise.all([
+          api.getFoodPosts(),
+          api.getStats()
+        ]);
+        
+        setFoodPosts(posts);
+        setStats(statsData);
+        setIsSseConnected(true);
 
-        // Process Real-time Event
-        switch (data.type) {
-          case 'FOOD_CREATED':
-            if (data.foodPost) {
-              setFoodPosts((prev) => {
-                const filtered = prev.filter((p) => p.id !== data.foodPost!.id);
-                return [data.foodPost!, ...filtered];
-              });
-            }
-            break;
-
-          case 'FOOD_CLAIMED':
-            if (data.foodPost) {
-              setFoodPosts((prev) =>
-                prev.map((p) => (p.id === data.foodPost!.id ? data.foodPost! : p))
-              );
-              // Also update currently opened modal post if matching
-              setSelectedFoodDetails((current) =>
-                current?.id === data.foodPost!.id ? data.foodPost! : current
-              );
-            }
-            break;
-
-          case 'FOOD_COLLECTED':
-          case 'FOOD_CANCELLED':
-          case 'FOOD_EXPIRED':
-            if (data.foodPost) {
-              setFoodPosts((prev) =>
-                prev.map((p) => (p.id === data.foodPost!.id ? data.foodPost! : p))
-              );
-              setSelectedFoodDetails((current) =>
-                current?.id === data.foodPost!.id ? data.foodPost! : current
-              );
-            }
-            break;
-
-          default:
-            break;
-        }
-
-        // Refresh stats and notifications
-        api.getStats().then(setStats).catch(() => {});
         if (currentUser) {
-          api.getNotifications(currentUser.id).then(setNotifications).catch(() => {});
+          const notifs = await api.getNotifications(currentUser.id);
+          setNotifications(notifs);
         }
       } catch (err) {
-        // Ignore keep-alive comments
+        setIsSseConnected(false);
       }
     };
 
-    eventSource.onerror = () => {
-      setIsSseConnected(false);
-    };
+    // Initial fetch
+    pollData();
 
-    return () => {
-      eventSource.close();
-    };
+    // Poll every 5 seconds
+    interval = setInterval(pollData, 5000);
+
+    return () => clearInterval(interval);
   }, [currentUser]);
 
   // 4. Claim Food Handler (Atomic Concurrency-Guarded Backend Call)
