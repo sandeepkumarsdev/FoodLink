@@ -1,9 +1,9 @@
-import { PGlite } from '@electric-sql/pglite';
+
 import pgDriver from 'pg';
 import path from 'path';
 import fs from 'fs';
 import * as dotenv from 'dotenv';
-import { User, FoodPost, Claim, NotificationItem } from '../src/types/index.js';
+import { User, FoodPost, Claim, NotificationItem } from '../types/index.js';
 
 dotenv.config();
 
@@ -51,12 +51,20 @@ if (process.env.POSTGRES_URL) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
 
-  const pgliteInstance = new PGlite(PG_DATA_DIR);
+  let pgliteInstance: any;
   dbClient = {
     query: async (sql, params) => {
+      if (!pgliteInstance) {
+        const { PGlite } = await import('@electric-sql/pglite');
+        pgliteInstance = new PGlite(PG_DATA_DIR);
+      }
       return (params !== undefined ? pgliteInstance.query(sql, params) : pgliteInstance.query(sql)) as any;
     },
     exec: async (sql) => {
+      if (!pgliteInstance) {
+        const { PGlite } = await import('@electric-sql/pglite');
+        pgliteInstance = new PGlite(PG_DATA_DIR);
+      }
       await pgliteInstance.exec(sql);
     }
   };
