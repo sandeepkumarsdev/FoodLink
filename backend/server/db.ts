@@ -39,6 +39,11 @@ if (process.env.POSTGRES_URL) {
     }
   };
 } else {
+  if (process.env.VERCEL) {
+    console.error('CRITICAL ERROR: POSTGRES_URL environment variable is missing in Vercel!');
+    throw new Error('Vercel deployment requires POSTGRES_URL environment variable to be set.');
+  }
+
   const DATA_DIR = path.resolve(process.cwd(), 'data');
   const PG_DATA_DIR = path.join(DATA_DIR, 'pgdata');
 
