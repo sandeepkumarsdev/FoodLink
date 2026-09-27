@@ -11,10 +11,6 @@ export default defineConfig(() => {
         '@': path.resolve(import.meta.dirname, '.'),
       },
     },
-    build: {
-      outDir: '../dist',
-      emptyOutDir: true,
-    },
     server: {
       proxy: {
         '/api': 'http://localhost:3000',
