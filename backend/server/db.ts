@@ -22,7 +22,9 @@ if (process.env.POSTGRES_URL) {
   const pool = new pgDriver.Pool({
     connectionString: process.env.POSTGRES_URL,
     ssl: { rejectUnauthorized: false },
-    max: 1
+    max: 1,
+    connectionTimeoutMillis: 3000,
+    query_timeout: 3000
   });
   
   pool.on('error', (err) => {
