@@ -41,33 +41,36 @@ if (process.env.POSTGRES_URL) {
 } else {
   if (process.env.VERCEL) {
     console.error('CRITICAL ERROR: POSTGRES_URL environment variable is missing in Vercel!');
-    throw new Error('Vercel deployment requires POSTGRES_URL environment variable to be set.');
-  }
+    dbClient = {
+      query: async () => { throw new Error('Vercel deployment requires POSTGRES_URL environment variable to be set.'); },
+      exec: async () => { throw new Error('Vercel deployment requires POSTGRES_URL environment variable to be set.'); }
+    };
+  } else {
+    const DATA_DIR = path.resolve(process.cwd(), 'data');
+    const PG_DATA_DIR = path.join(DATA_DIR, 'pgdata');
 
-  const DATA_DIR = path.resolve(process.cwd(), 'data');
-  const PG_DATA_DIR = path.join(DATA_DIR, 'pgdata');
-
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-
-  let pgliteInstance: any;
-  dbClient = {
-    query: async (sql, params) => {
-      if (!pgliteInstance) {
-        const { PGlite } = await import('@electric-sql/pglite');
-        pgliteInstance = new PGlite(PG_DATA_DIR);
-      }
-      return (params !== undefined ? pgliteInstance.query(sql, params) : pgliteInstance.query(sql)) as any;
-    },
-    exec: async (sql) => {
-      if (!pgliteInstance) {
-        const { PGlite } = await import('@electric-sql/pglite');
-        pgliteInstance = new PGlite(PG_DATA_DIR);
-      }
-      await pgliteInstance.exec(sql);
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
     }
-  };
+
+    let pgliteInstance: any;
+    dbClient = {
+      query: async (sql, params) => {
+        if (!pgliteInstance) {
+          const { PGlite } = await import('@electric-sql/pglite');
+          pgliteInstance = new PGlite(PG_DATA_DIR);
+        }
+        return (params !== undefined ? pgliteInstance.query(sql, params) : pgliteInstance.query(sql)) as any;
+      },
+      exec: async (sql) => {
+        if (!pgliteInstance) {
+          const { PGlite } = await import('@electric-sql/pglite');
+          pgliteInstance = new PGlite(PG_DATA_DIR);
+        }
+        await pgliteInstance.exec(sql);
+      }
+    };
+  }
 }
 
 // Persistent Local or Remote PostgreSQL Instance
