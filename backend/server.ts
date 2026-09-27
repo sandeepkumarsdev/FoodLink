@@ -953,8 +953,20 @@ async function startServer() {
   }
 }
 
-startServer().catch((err) => {
-  console.error('Failed to start Foodlink server:', err);
+// Add an endpoint to manually initialize the DB on Vercel
+app.get('/api/init-db', async (req: Request, res: Response) => {
+  try {
+    await initPostgres();
+    res.json({ success: true, message: 'Database initialized and seeded successfully' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to init DB', message: err.message });
+  }
 });
+
+if (!process.env.VERCEL) {
+  startServer().catch((err) => {
+    console.error('Failed to start Foodlink server:', err);
+  });
+}
 
 export default app;
