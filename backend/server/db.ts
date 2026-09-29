@@ -42,10 +42,50 @@ if (process.env.POSTGRES_URL) {
   };
 } else {
   if (process.env.VERCEL) {
-    console.error('CRITICAL ERROR: POSTGRES_URL environment variable is missing in Vercel!');
+    console.warn('WARNING: POSTGRES_URL is missing in Vercel. Falling back to an ephemeral in-memory PGlite database for demonstration purposes.');
+    let pgliteInstance: any = null;
+    let isReady = false;
+    let initQueue: Array<() => void> = [];
+
+    const ensureDb = async () => {
+      if (isReady) return pgliteInstance;
+      if (pgliteInstance) {
+        return new Promise<any>(resolve => {
+          initQueue.push(() => resolve(pgliteInstance));
+        });
+      }
+      
+      const { PGlite } = await import('@electric-sql/pglite');
+      pgliteInstance = new PGlite();
+      
+      try {
+        await pgliteInstance.exec(`
+          CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT UNIQUE NOT NULL, phone TEXT, user_type TEXT NOT NULL CHECK (user_type IN ('USER', 'COLLEGE', 'ADMIN')), college TEXT NOT NULL, canteen_name TEXT, is_verified BOOLEAN DEFAULT FALSE, avatar_url TEXT, created_at TIMESTAMPTZ DEFAULT NOW());
+          CREATE TABLE IF NOT EXISTS food_posts (id TEXT PRIMARY KEY, college_id TEXT NOT NULL, canteen_id TEXT NOT NULL, college_name TEXT NOT NULL, canteen_name TEXT NOT NULL, food_name TEXT NOT NULL, description TEXT NOT NULL, quantity TEXT NOT NULL, servings_count INTEGER DEFAULT 10, image_url TEXT NOT NULL, available_from TIMESTAMPTZ NOT NULL, collection_deadline TIMESTAMPTZ NOT NULL, location TEXT NOT NULL, status TEXT NOT NULL CHECK (status IN ('AVAILABLE', 'CLAIMED', 'COLLECTED', 'EXPIRED', 'CANCELLED')), claimed_by TEXT REFERENCES users(id), claimant_name TEXT, claimant_phone TEXT, claim_code TEXT, claimed_at TIMESTAMPTZ, collected_at TIMESTAMPTZ, cancelled_at TIMESTAMPTZ, cancellation_reason TEXT, food_safety_info TEXT NOT NULL, dietary_tags JSONB DEFAULT '[]'::jsonb, temperature TEXT CHECK (temperature IN ('HOT', 'COLD', 'ROOM_TEMP')), created_at TIMESTAMPTZ DEFAULT NOW());
+          CREATE TABLE IF NOT EXISTS claims (id TEXT PRIMARY KEY, food_post_id TEXT NOT NULL REFERENCES food_posts(id) ON DELETE CASCADE, user_id TEXT NOT NULL REFERENCES users(id), user_name TEXT NOT NULL, user_phone TEXT, status TEXT NOT NULL CHECK (status IN ('CLAIMED', 'COLLECTED', 'CANCELLED')), claim_code TEXT NOT NULL, claimed_at TIMESTAMPTZ DEFAULT NOW(), collected_at TIMESTAMPTZ);
+          CREATE TABLE IF NOT EXISTS notifications (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), food_post_id TEXT REFERENCES food_posts(id) ON DELETE SET NULL, title TEXT NOT NULL, message TEXT NOT NULL, type TEXT NOT NULL, read BOOLEAN DEFAULT FALSE, created_at TIMESTAMPTZ DEFAULT NOW());
+        `);
+        isReady = true;
+        await seedPostgresData();
+      } catch (err) {
+        console.error("Failed to init in-memory DB", err);
+      }
+      
+      for (const resolve of initQueue) resolve(pgliteInstance);
+      initQueue = [];
+      
+      return pgliteInstance;
+    };
+
     dbClient = {
-      query: async () => { throw new Error('Vercel deployment requires POSTGRES_URL environment variable to be set.'); },
-      exec: async () => { throw new Error('Vercel deployment requires POSTGRES_URL environment variable to be set.'); }
+      query: async (sql, params) => {
+        const db = await ensureDb();
+        return (params !== undefined ? db.query(sql, params) : db.query(sql)) as any;
+      },
+      exec: async (sql) => {
+        const db = await ensureDb();
+        await db.exec(sql);
+      }
     };
   } else {
     const DATA_DIR = path.resolve(process.cwd(), 'data');
