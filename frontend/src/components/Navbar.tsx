@@ -108,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('browse')}
               className="flex items-center gap-2.5 text-left group"
             >
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform overflow-hidden bg-white">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform overflow-hidden">
                 <img src="/logo.png" alt="Foodlink" className="w-full h-full object-contain" />
               </div>
               <div>
