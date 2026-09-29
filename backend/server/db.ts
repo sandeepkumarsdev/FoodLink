@@ -23,8 +23,8 @@ if (process.env.POSTGRES_URL) {
     connectionString: process.env.POSTGRES_URL,
     ssl: { rejectUnauthorized: false },
     max: 1,
-    connectionTimeoutMillis: 3000,
-    query_timeout: 3000
+    connectionTimeoutMillis: 10000,
+    query_timeout: 10000
   });
   
   pool.on('error', (err) => {
